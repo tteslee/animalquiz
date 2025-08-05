@@ -5,6 +5,7 @@ let currentQuestionIndex = 0;
 let currentScore = 0;
 let selectedAnswer = null;
 let currentDifficulty = '';
+let currentLanguage = 'en'; // Default language
 
 // DOM elements
 const welcomeScreen = document.getElementById('welcome-screen');
@@ -30,12 +31,14 @@ const performanceText = document.getElementById('performance-text');
 // Initialize the game
 document.addEventListener('DOMContentLoaded', function() {
     loadQuizData();
+    updateLanguage(); // Set initial language
 });
 
 // Load quiz data from CSV
 async function loadQuizData() {
     try {
-        const response = await fetch('animal_quiz_questions.csv');
+        const csvFile = currentLanguage === 'nl' ? 'animal_quiz_questions_nl.csv' : 'animal_quiz_questions.csv';
+        const response = await fetch(csvFile);
         const csvText = await response.text();
         quizData = parseCSV(csvText);
         console.log('Quiz data loaded successfully:', quizData.length, 'questions');
@@ -96,44 +99,86 @@ function parseCSVLine(line) {
 
 // Fallback data in case CSV loading fails
 function getFallbackData() {
-    return [
-        {
-            difficulty: 'Easy',
-            question: 'Which of these animals is the fastest?',
-            optionA: 'Cheetah',
-            optionB: 'Puma',
-            optionC: 'Lion',
-            optionD: 'Wolf',
-            correctAnswer: 'Cheetah'
-        },
-        {
-            difficulty: 'Easy',
-            question: 'Which of these animals says "meow"?',
-            optionA: 'Dog',
-            optionB: 'Cat',
-            optionC: 'Cow',
-            optionD: 'Horse',
-            correctAnswer: 'Cat'
-        },
-        {
-            difficulty: 'Normal',
-            question: 'Which animal can sleep standing up?',
-            optionA: 'Dog',
-            optionB: 'Horse',
-            optionC: 'Giraffe',
-            optionD: 'Kangaroo',
-            correctAnswer: 'Horse'
-        },
-        {
-            difficulty: 'Hard',
-            question: 'Which animal is known to be biologically immortal under lab conditions?',
-            optionA: 'Axolotl',
-            optionB: 'Immortal jellyfish',
-            optionC: 'Hydra',
-            optionD: 'Sea sponge',
-            correctAnswer: 'Immortal jellyfish'
-        }
-    ];
+    const fallbackData = {
+        en: [
+            {
+                difficulty: 'Easy',
+                question: 'Which of these animals is the fastest?',
+                optionA: 'Cheetah',
+                optionB: 'Puma',
+                optionC: 'Lion',
+                optionD: 'Wolf',
+                correctAnswer: 'Cheetah'
+            },
+            {
+                difficulty: 'Easy',
+                question: 'Which of these animals says "meow"?',
+                optionA: 'Dog',
+                optionB: 'Cat',
+                optionC: 'Cow',
+                optionD: 'Horse',
+                correctAnswer: 'Cat'
+            },
+            {
+                difficulty: 'Normal',
+                question: 'Which animal can sleep standing up?',
+                optionA: 'Dog',
+                optionB: 'Horse',
+                optionC: 'Giraffe',
+                optionD: 'Kangaroo',
+                correctAnswer: 'Horse'
+            },
+            {
+                difficulty: 'Hard',
+                question: 'Which animal is known to be biologically immortal under lab conditions?',
+                optionA: 'Axolotl',
+                optionB: 'Immortal jellyfish',
+                optionC: 'Hydra',
+                optionD: 'Sea sponge',
+                correctAnswer: 'Immortal jellyfish'
+            }
+        ],
+        nl: [
+            {
+                difficulty: 'Easy',
+                question: 'Welke van deze dieren is het snelste?',
+                optionA: 'Jachtluipaard',
+                optionB: 'Puma',
+                optionC: 'Leeuw',
+                optionD: 'Wolf',
+                correctAnswer: 'Jachtluipaard'
+            },
+            {
+                difficulty: 'Easy',
+                question: 'Welke van deze dieren zegt "miauw"?',
+                optionA: 'Hond',
+                optionB: 'Kat',
+                optionC: 'Koe',
+                optionD: 'Paard',
+                correctAnswer: 'Kat'
+            },
+            {
+                difficulty: 'Normal',
+                question: 'Welke dier kan staand slapen?',
+                optionA: 'Hond',
+                optionB: 'Paard',
+                optionC: 'Giraffe',
+                optionD: 'Kangoeroe',
+                correctAnswer: 'Paard'
+            },
+            {
+                difficulty: 'Hard',
+                question: 'Welke dier staat bekend als biologisch onsterfelijk onder laboratoriumomstandigheden?',
+                optionA: 'Axolotl',
+                optionB: 'Onsterfelijke kwal',
+                optionC: 'Hydra',
+                optionD: 'Zeepons',
+                correctAnswer: 'Onsterfelijke kwal'
+            }
+        ]
+    };
+    
+    return fallbackData[currentLanguage] || fallbackData.en;
 }
 
 // Start quiz with selected difficulty
@@ -242,24 +287,27 @@ function nextQuestion() {
 function showResults() {
     const totalQuestions = currentQuestions.length;
     const percentage = Math.round((currentScore / totalQuestions) * 100);
+    const lang = translations[currentLanguage];
     
-    finalScoreText.textContent = `You scored ${currentScore} out of ${totalQuestions}!`;
+    finalScoreText.textContent = lang.finalScore
+        .replace('{score}', currentScore)
+        .replace('{total}', totalQuestions);
     scorePercentage.textContent = `${percentage}%`;
     
     // Set performance message based on score
     let performanceMessage = '';
     if (percentage >= 90) {
-        performanceMessage = 'Excellent! You\'re an animal expert!';
+        performanceMessage = lang.performanceMessages.excellent;
     } else if (percentage >= 80) {
-        performanceMessage = 'Great job! You know your animals well!';
+        performanceMessage = lang.performanceMessages.great;
     } else if (percentage >= 70) {
-        performanceMessage = 'Good work! You have solid animal knowledge!';
+        performanceMessage = lang.performanceMessages.good;
     } else if (percentage >= 60) {
-        performanceMessage = 'Not bad! Keep learning about animals!';
+        performanceMessage = lang.performanceMessages.notBad;
     } else if (percentage >= 50) {
-        performanceMessage = 'You\'re getting there! Try again to improve!';
+        performanceMessage = lang.performanceMessages.gettingThere;
     } else {
-        performanceMessage = 'Keep practicing! You\'ll get better!';
+        performanceMessage = lang.performanceMessages.keepPracticing;
     }
     
     performanceText.textContent = performanceMessage;
@@ -292,10 +340,13 @@ function showScreen(screenId) {
 function updateProgress() {
     const totalQuestions = currentQuestions.length;
     const progress = ((currentQuestionIndex + 1) / totalQuestions) * 100;
+    const lang = translations[currentLanguage];
     
-    questionCounter.textContent = `Question ${currentQuestionIndex + 1} of ${totalQuestions}`;
+    questionCounter.textContent = lang.questionCounter
+        .replace('{current}', currentQuestionIndex + 1)
+        .replace('{total}', totalQuestions);
     progressFill.style.width = `${progress}%`;
-    currentScoreElement.textContent = `Score: ${currentScore}`;
+    currentScoreElement.textContent = lang.score.replace('{score}', currentScore);
 }
 
 // Utility function to shuffle array
@@ -362,6 +413,68 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+
+// Language functions
+function toggleLanguage() {
+    currentLanguage = currentLanguage === 'en' ? 'nl' : 'en';
+    updateLanguage();
+    
+    // Reload quiz data with new language
+    if (quizData.length > 0) {
+        loadQuizData().then(() => {
+            // If currently in a quiz, restart with new language
+            if (currentQuestions.length > 0) {
+                startQuiz(currentDifficulty);
+            }
+        });
+    }
+}
+
+function updateLanguage() {
+    const lang = translations[currentLanguage];
+    
+    // Update header
+    document.getElementById('main-title').textContent = lang.title;
+    document.getElementById('main-subtitle').textContent = lang.subtitle;
+    document.getElementById('language-toggle').textContent = lang.languageToggle;
+    
+    // Update welcome screen
+    document.getElementById('welcome-title').textContent = lang.welcomeTitle;
+    document.getElementById('welcome-subtitle').textContent = lang.welcomeSubtitle;
+    document.getElementById('easy-text').textContent = lang.easy;
+    document.getElementById('normal-text').textContent = lang.normal;
+    document.getElementById('hard-text').textContent = lang.hard;
+    document.getElementById('instructions-title').textContent = lang.instructionsTitle;
+    
+    // Update instructions list
+    const instructionsList = document.getElementById('instructions-list');
+    instructionsList.innerHTML = '';
+    lang.instructions.forEach(instruction => {
+        const li = document.createElement('li');
+        li.textContent = instruction;
+        instructionsList.appendChild(li);
+    });
+    
+    // Update quiz screen
+    document.getElementById('next-btn').textContent = lang.nextQuestion;
+    document.getElementById('question-text').textContent = lang.loadingQuestion;
+    
+    // Update results screen
+    document.getElementById('results-title').textContent = lang.quizComplete;
+    document.getElementById('play-again-text').textContent = lang.playAgain;
+    document.getElementById('try-different-text').textContent = lang.tryDifferentDifficulty;
+    
+    // Update footer
+    document.getElementById('footer-text').textContent = lang.footer;
+    
+    // Update current display if quiz is active
+    if (currentQuestions.length > 0) {
+        updateProgress();
+        if (currentQuestionIndex < currentQuestions.length) {
+            displayQuestion();
+        }
+    }
+}
 
 // Add CSS for ripple effect
 const style = document.createElement('style');
