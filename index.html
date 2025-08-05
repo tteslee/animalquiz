@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animal Quiz Game</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Animal Quiz Game</h1>
+            <p class="subtitle">Test your knowledge about animals</p>
+        </header>
+
+        <main>
+            <!-- Welcome Screen -->
+            <div id="welcome-screen" class="screen active">
+                <div class="welcome-content">
+                    <h2>Welcome to the Animal Quiz</h2>
+                    <p>Choose your difficulty level to get started:</p>
+                    
+                    <div class="difficulty-buttons">
+                        <button class="difficulty-btn easy" onclick="startQuiz('Easy')">
+                            <span class="difficulty-text">Easy</span>
+                        </button>
+                        <button class="difficulty-btn normal" onclick="startQuiz('Normal')">
+                            <span class="difficulty-text">Normal</span>
+                        </button>
+                        <button class="difficulty-btn hard" onclick="startQuiz('Hard')">
+                            <span class="difficulty-text">Hard</span>
+                        </button>
+                    </div>
+                    
+                    <div class="instructions">
+                        <h3>How to play</h3>
+                        <ul>
+                            <li>Choose your difficulty level</li>
+                            <li>Read each question carefully</li>
+                            <li>Click on your answer</li>
+                            <li>See your score at the end</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quiz Screen -->
+            <div id="quiz-screen" class="screen">
+                <div class="quiz-header">
+                    <div class="progress-info">
+                        <span id="question-counter">Question 1 of 10</span>
+                        <div class="progress-bar">
+                            <div id="progress-fill"></div>
+                        </div>
+                    </div>
+                    <div class="score-info">
+                        <span id="current-score">Score: 0</span>
+                    </div>
+                </div>
+
+                <div class="question-container">
+                    <h2 id="question-text">Loading question...</h2>
+                    
+                    <div class="options-container">
+                        <button class="option-btn" data-option="A" onclick="selectOption('A')">
+                            <span class="option-letter">A</span>
+                            <span class="option-text" id="option-a">Loading...</span>
+                        </button>
+                        <button class="option-btn" data-option="B" onclick="selectOption('B')">
+                            <span class="option-letter">B</span>
+                            <span class="option-text" id="option-b">Loading...</span>
+                        </button>
+                        <button class="option-btn" data-option="C" onclick="selectOption('C')">
+                            <span class="option-letter">C</span>
+                            <span class="option-text" id="option-c">Loading...</span>
+                        </button>
+                        <button class="option-btn" data-option="D" onclick="selectOption('D')">
+                            <span class="option-letter">D</span>
+                            <span class="option-text" id="option-d">Loading...</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="quiz-controls">
+                    <button id="next-btn" class="next-btn" onclick="nextQuestion()" disabled>
+                        Next Question
+                    </button>
+                </div>
+            </div>
+
+            <!-- Results Screen -->
+            <div id="results-screen" class="screen">
+                <div class="results-content">
+                    <h2>Quiz Complete</h2>
+                    
+                    <div class="score-display">
+                        <div class="final-score">
+                            <span id="final-score-text">You scored 8 out of 10!</span>
+                        </div>
+                        <div class="score-percentage">
+                            <span id="score-percentage">80%</span>
+                        </div>
+                    </div>
+
+                    <div class="performance-message">
+                        <p id="performance-text">Great job! You know your animals well!</p>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button class="action-btn primary" onclick="playAgain()">
+                            Play Again
+                        </button>
+                        <button class="action-btn secondary" onclick="changeDifficulty()">
+                            Try Different Difficulty
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>Enjoy learning about animals</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html> 
