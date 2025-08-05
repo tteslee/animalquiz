@@ -9,32 +9,37 @@
 <body>
     <div class="container">
         <header>
-            <h1>Animal Quiz Game</h1>
-            <p class="subtitle">Test your knowledge about animals</p>
+            <div class="header-content">
+                <div class="title-section">
+                    <h1 id="main-title">Animal Quiz Game</h1>
+                    <p class="subtitle" id="main-subtitle">Test your knowledge about animals</p>
+                </div>
+                <button id="language-toggle" class="language-toggle" onclick="toggleLanguage()">NL</button>
+            </div>
         </header>
 
         <main>
             <!-- Welcome Screen -->
             <div id="welcome-screen" class="screen active">
                 <div class="welcome-content">
-                    <h2>Welcome to the Animal Quiz</h2>
-                    <p>Choose your difficulty level to get started:</p>
+                    <h2 id="welcome-title">Welcome to the Animal Quiz</h2>
+                    <p id="welcome-subtitle">Choose your difficulty level to get started:</p>
                     
                     <div class="difficulty-buttons">
                         <button class="difficulty-btn easy" onclick="startQuiz('Easy')">
-                            <span class="difficulty-text">Easy</span>
+                            <span class="difficulty-text" id="easy-text">Easy</span>
                         </button>
                         <button class="difficulty-btn normal" onclick="startQuiz('Normal')">
-                            <span class="difficulty-text">Normal</span>
+                            <span class="difficulty-text" id="normal-text">Normal</span>
                         </button>
                         <button class="difficulty-btn hard" onclick="startQuiz('Hard')">
-                            <span class="difficulty-text">Hard</span>
+                            <span class="difficulty-text" id="hard-text">Hard</span>
                         </button>
                     </div>
                     
                     <div class="instructions">
-                        <h3>How to play</h3>
-                        <ul>
+                        <h3 id="instructions-title">How to play</h3>
+                        <ul id="instructions-list">
                             <li>Choose your difficulty level</li>
                             <li>Read each question carefully</li>
                             <li>Click on your answer</li>
@@ -91,7 +96,7 @@
             <!-- Results Screen -->
             <div id="results-screen" class="screen">
                 <div class="results-content">
-                    <h2>Quiz Complete</h2>
+                    <h2 id="results-title">Quiz Complete</h2>
                     
                     <div class="score-display">
                         <div class="final-score">
@@ -108,10 +113,10 @@
 
                     <div class="action-buttons">
                         <button class="action-btn primary" onclick="playAgain()">
-                            Play Again
+                            <span id="play-again-text">Play Again</span>
                         </button>
                         <button class="action-btn secondary" onclick="changeDifficulty()">
-                            Try Different Difficulty
+                            <span id="try-different-text">Try Different Difficulty</span>
                         </button>
                     </div>
                 </div>
@@ -119,10 +124,11 @@
         </main>
 
         <footer>
-            <p>Enjoy learning about animals</p>
+            <p id="footer-text">Enjoy learning about animals</p>
         </footer>
     </div>
 
+    <script src="translations.js"></script>
     <script src="script.js"></script>
 </body>
 </html> 
